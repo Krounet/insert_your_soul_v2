@@ -1,4 +1,5 @@
 import pygame
+from loading_sprite import Loading_sprite
 
 class Game:
 
@@ -10,73 +11,41 @@ class Game:
 		# Affichage de la fenêtre
 		self.screen = pygame.display.set_mode((1024,768))
 		pygame.display.set_caption("insert your soul")
-	
-	
-	def launch_screen(self):
-		#chargement elements de l'écran d'accueil
-		load_elements={"bg":pygame.image.load("sprites\loading_screen\loading_screen.png"),"SOUL_1":pygame.image.load("sprites\loading_screen\SOUL_exec1.png"),
-		"SOUL_2":pygame.image.load("sprites\loading_screen\SOUL_exec2.png"),"INFOS_1":pygame.image.load("sprites\loading_screen\INFOS1.png"),"INFOS_2":pygame.image.load("sprites\loading_screen\INFOS2.png")}
-		load_elements["bg"].convert()
-		load_elements["SOUL_1"].convert()
-		load_elements["SOUL_2"].convert()
-		load_elements["INFOS_1"].convert()
-		load_elements["INFOS_2"].convert()
-		return load_elements
-	
-	def game_screen(self):
-		#chargement éléments du jeu
-		load_elements={"game_screen_1":pygame.image.load("sprites\game_screen\game_screen1.png").convert(),"demon_1":pygame.image.load("sprites\demon\demon1.png").convert(),
-		"demon_2":pygame.image.load("sprites\demon\demon2.png").convert(),"demon_3":pygame.image.load("sprites\demon\demon3.png").convert(),
-		"perso_1":pygame.image.load("sprites\perso_principal\perso_marche1.png").convert(),
-		"perso_2":pygame.image.load("sprites\perso_principal\perso_marche2.png").convert(),"perso_3":pygame.image.load("sprites\perso_principal\perso_marche3.png").convert(),
-		"missile_sacre":pygame.image.load("sprites\perso_principal\missile_sacre.png").convert(),"perso_1_left":pygame.image.load("sprites\perso_principal\perso_marche1_left.png").convert(),
-		"perso_2_left":pygame.image.load("sprites\perso_principal\perso_marche2_left.png").convert(),"perso_3_left":pygame.image.load("sprites\perso_principal\perso_marche3_left.png").convert(),
-		"missile_sacre_left":pygame.image.load("sprites\perso_principal\missile_sacre_left.png").convert(),"0_vert":pygame.image.load("sprites\chiffres\chiffre_vert1.png").convert(),
-		"1_vert":pygame.image.load("sprites\chiffres\chiffre_vert2.png").convert(),"2_vert":pygame.image.load("sprites\chiffres\chiffre_vert3.png").convert(),
-		"3_vert":pygame.image.load("sprites\chiffres\chiffre_vert4.png").convert(),"4_vert":pygame.image.load("sprites\chiffres\chiffre_vert5.png").convert(),
-		"5_vert":pygame.image.load("sprites\chiffres\chiffre_vert6.png").convert(),
-		"0_rouge":pygame.image.load("sprites\chiffres\chiffre_rouge1.png").convert(),
-		"1_rouge":pygame.image.load("sprites\chiffres\chiffre_rouge2.png").convert(),
-		"2_rouge":pygame.image.load("sprites\chiffres\chiffre_rouge3.png").convert(),"3_rouge":pygame.image.load("sprites\chiffres\chiffre_rouge4.png").convert(),
-		"4_rouge":pygame.image.load("sprites\chiffres\chiffre_rouge5.png").convert(),
-		"5_rouge":pygame.image.load("sprites\chiffres\chiffre_rouge6.png").convert(),"6_rouge":pygame.image.load("sprites\chiffres\chiffre_rouge7.png").convert(),
-		"7_rouge":pygame.image.load("sprites\chiffres\chiffre_rouge8.png").convert(),
-		"8_rouge":pygame.image.load("sprites\chiffres\chiffre_rouge9.png").convert(),"9_rouge":pygame.image.load("sprites\chiffres\chiffre_rouge10.png").convert()}
-		return load_elements
 		
+		#chargement elements graphiques
+		self.launch_elements = Loading_sprite.launch_screen()
+		self.game_elements=Loading_sprite.game_screen()
+		self.infos_elements=Loading_sprite.infos_screen()
 		
-	def infos_screen(self):
-		#chargement éléments d'infos du jeu
-		load_elements={"infos_screen":pygame.image.load("sprites\infos_screen\INFOSscreen.png").convert()}
-		return load_elements
+
 		
-	def blink_launch_butt(self,track_time=0,index_launch,launch_butt_1,launch_butt_2):
-		#clignotement boutton de lancement
-		track_time=track_time+self.clock #timer changement d'état si > 500 ms. 
-		if track_time<=500 and index_soul==0:
-			butt_version=soul_butt_1
+	def blink_launch_butt(self,track_time,index_launch,launch_butt_1,launch_butt_2):
+		#clignotement boutton de lancement. si track_time > 500 ms changement d'état
+		track_time=track_time+self.clock.get_time() 
+		if track_time<=500 and index_launch==0:
+			butt_version=launch_butt_1
 		
-		if track_time<=500 and index_soul==1:
-			butt_version=soul_butt_2
+		if track_time<=500 and index_launch==1:
+			butt_version=launch_butt_2
 		
 			
 		if track_time >= 500:
-			if index_soul==0:
-				butt_version=soul_butt_2
-				index_soul=1
+			if index_launch==0:
+				butt_version=launch_butt_2
+				index_launch=1
 				track_time=0
 			else :
-				butt_version=soul_butt_1
-				index_soul=0
+				butt_version=launch_butt_1
+				index_launch=0
 				track_time=0
-		return butt_version,index_soul,track_time
+		return butt_version,index_launch,track_time
 	
-	def highlight_butt(xmin,xmax,ymin,ymax,butt_state_1,butt_state_2):
+	def highlight_butt(self,xmin,xmax,ymin,ymax,highlight_state_1,highlight_state_2):
 		#Highlight boutons de lancement ou infos
 		if pygame.mouse.get_pos()[0]>xmin and pygame.mouse.get_pos()[0]<xmax and pygame.mouse.get_pos()[1]>ymin and pygame.mouse.get_pos()[1]<ymax:
-			image_state=butt_state_2
+			image_state=highlight_state_2
 		else:
-			image_state=butt_state_1
+			image_state=highlight_state_1
 		return image_state
 	
 	
@@ -88,34 +57,39 @@ class Game:
 			change = False
 		return change
 	
-	def handle_input(self):
+	def handler_input(self):
 		pressed=pygame.key.get_pressed()
 		#Escape pour quitter le jeu
 		if pressed[pygame.K_ESCAPE]:
 			self.running=False
 		#Z ou Up pour sauter (fonction à créer dans player)
-		elif pressed[pygame.K_z] or pressed [pygame.UP]:
+		elif pressed[pygame.K_z] or pressed[pygame.K_UP]:
 			self.player.move_player("jump")
 		#Q ou left pour aller à gauche (fonction à créer dans player)
-		elif pressed[pygame.K_q] or pressed pressed [pygame.K_LEFT]:
+		elif pressed[pygame.K_q] or pressed[pygame.K_LEFT]:
 			self.player.move_player("left")
 		#D ou right pour aller à droite (fonction à créer dans player)
-		elif pressed[pygame.K_d] or pressed pressed [pygame.K_RIGHT]:
+		elif pressed[pygame.K_d] or pressed[pygame.K_RIGHT]:
 			self.player.move_player("right")
 		#Espace pour tirer (fcontion à créer)
 		elif pressed[pygame.K_SPACE]:
 			self.player.shoot()
-		elif pressed_mouse
+
 		
 	
 	
 	def run(self):
-		self.clock=pygame.time.Clock
+		self.clock=pygame.time.Clock()
+		track_time=0
+		index_launch=0
+		index_game=0
+		index_infos=0
+		index_blink=0
 		while self.running:
-			self.player.save_location()
+			#self.player.save_location()
 			self.handler_input()
-			self.update()
-			pygame.display.flip()
+			#self.update()
+			#pygame.display.flip()
 
 			#gestion event commande
 			for event in pygame.event.get():
@@ -128,9 +102,32 @@ class Game:
 					status_launch_infos=self.click_button(20,296,672,756)
 					if status_launch_game==True:
 						index_game=1
+						
 					elif status_launch_infos==True:
-						index_game=0
+						index_infos=1
 						
-						
-			clock.tick(60)
+			if index_game==1:
+				return 0
+				#gestion ecran de jeu
+			elif index_infos==1:
+				#lancement ecran d'infon
+				self.screen.blit(self.infos_elements,[0,0])
+				
+			else:
+				#gestion écran de chargement
+				self.screen.blit(self.launch_elements["bg"],[0,0])
+				values_blink_butt=self.blink_launch_butt(track_time=track_time,index_launch=index_blink,launch_butt_1=self.launch_elements["SOUL_1"],launch_butt_2=self.launch_elements["SOUL_2"])
+				#screen_window.blit(self.launch_elements["INFOS_1"],[20,672])
+				index_blink=values_blink_butt[1]
+				track_time=values_blink_butt[2]
+				
+				#highlight infos buttons + launch buttons
+				highlight_launch=self.highlight_butt(405,630,470,663,highlight_state_1=self.launch_elements["SOUL_1"],highlight_state_2=self.launch_elements["SOUL_2"])
+				if highlight_launch==self.launch_elements["SOUL_2"]:
+					self.screen.blit(highlight_launch,[405,470])
+				highlight_infos=self.highlight_butt(20,296,672,756,highlight_state_1=self.launch_elements["INFOS_1"],highlight_state_2=self.launch_elements["INFOS_2"])
+				self.screen.blit(highlight_infos,[20,672])
+				
+			pygame.display.update()
+			self.clock.tick(60)
 		pygame.quit()
