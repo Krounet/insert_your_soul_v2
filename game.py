@@ -88,6 +88,26 @@ class Game:
 			change = False
 		return change
 	
+	def handle_input(self):
+		pressed=pygame.key.get_pressed()
+		#Escape pour quitter le jeu
+		if pressed[pygame.K_ESCAPE]:
+			self.running=False
+		#Z ou Up pour sauter (fonction à créer dans player)
+		elif pressed[pygame.K_z] or pressed [pygame.UP]:
+			self.player.move_player("jump")
+		#Q ou left pour aller à gauche (fonction à créer dans player)
+		elif pressed[pygame.K_q] or pressed pressed [pygame.K_LEFT]:
+			self.player.move_player("left")
+		#D ou right pour aller à droite (fonction à créer dans player)
+		elif pressed[pygame.K_d] or pressed pressed [pygame.K_RIGHT]:
+			self.player.move_player("right")
+		#Espace pour tirer (fcontion à créer)
+		elif pressed[pygame.K_SPACE]:
+			self.player.shoot()
+		elif pressed_mouse
+		
+	
 	
 	def run(self):
 		self.clock=pygame.time.Clock
@@ -99,9 +119,6 @@ class Game:
 
 			#gestion event commande
 			for event in pygame.event.get():
-				if event.type==pygame.KEYDOWN:
-					if pygame.key.get_pressed()[pygame.K_ESCAPE]:
-						launched=False
 						
 				if event.type==pygame.QUIT:
 					self.running = False
