@@ -1,6 +1,6 @@
 import pygame
 from loading_sprite import Loading_sprite
-
+from player import Player
 class Game:
 
 	def __init__(self):
@@ -49,7 +49,7 @@ class Game:
 		return image_state
 	
 	
-	def click_button(xmin,xmax,ymin,ymax):
+	def click_button(self,xmin,xmax,ymin,ymax):
 		#action lors d'un click
 		if pygame.mouse.get_pos()[0]>xmin and pygame.mouse.get_pos()[0]<xmax and pygame.mouse.get_pos()[1]>ymin and pygame.mouse.get_pos()[1]<ymax:
 			change = True
@@ -111,13 +111,15 @@ class Game:
 				#gestion ecran de jeu
 			elif index_infos==1:
 				#lancement ecran d'infon
-				self.screen.blit(self.infos_elements,[0,0])
+				self.screen.blit(self.infos_elements["infos_screen"],[0,0])
+				
+				#Penser à ajouter un bouton pour retour à l'accueil
 				
 			else:
 				#gestion écran de chargement
 				self.screen.blit(self.launch_elements["bg"],[0,0])
 				values_blink_butt=self.blink_launch_butt(track_time=track_time,index_launch=index_blink,launch_butt_1=self.launch_elements["SOUL_1"],launch_butt_2=self.launch_elements["SOUL_2"])
-				#screen_window.blit(self.launch_elements["INFOS_1"],[20,672])
+				self.screen.blit(values_blink_butt[0],[405,470])
 				index_blink=values_blink_butt[1]
 				track_time=values_blink_butt[2]
 				
